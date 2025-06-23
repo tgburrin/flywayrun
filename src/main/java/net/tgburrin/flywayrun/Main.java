@@ -32,9 +32,11 @@ public class Main {
         Properties cfg = new Properties();
         cfg.load(new FileInputStream(parsedArgs.get("opt_p")));
 
-        if ( parsedArgs.get("opt_m") != null && Files.isRegularFile(Path.of(parsedArgs.get("opt_m"))) ) {
+        if ( parsedArgs.get("opt_m") != null && Files.isDirectory(Path.of(parsedArgs.get("opt_m"))) ) {
             cfg.setProperty("flyway.locations", "filesystem:"+parsedArgs.get("opt_m"));
         }
+
+        System.out.println("Checking "+cfg.getProperty("flyway.locations"));
 
         Flyway f = Flyway.configure().configuration(cfg).validateMigrationNaming(true).load();
         f.migrate();
